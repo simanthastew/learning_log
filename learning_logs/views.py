@@ -11,7 +11,7 @@ def index(request):
 
 def topics(request):
 	""" show all topics """
-	topics = Topics.objects.order_by('date_added')
+	topics = Topic.objects.order_by('date_added')
 	context = {'topics': topics}
 	#context is a dictionary sent to the template where keys are names used in the template to access data
 	return render(request, 'learning_logs/topics.html', context)
