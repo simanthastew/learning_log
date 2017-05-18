@@ -11,3 +11,16 @@ class Topic(models.Model):
 	def __unicode__(self):
 		""" return string representation of the model """
 		return self.text
+
+class Entry(models.Model):
+	""" something learned about a topic """
+	topic = models.ForeignKey(Topic)
+	text = models.TextField()
+	date_added = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		verbose_name_plural = 'entries'
+
+	def __unicode__(self):
+		""" return string representation of the model """
+		return self.text[:50] + '...'
