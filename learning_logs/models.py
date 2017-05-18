@@ -23,4 +23,7 @@ class Entry(models.Model):
 
 	def __unicode__(self):
 		""" return string representation of the model """
-		return self.text[:50] + '...'
+		if len(self.text) > 50:
+			return self.text[:50] + '...'
+		else:
+			return self.text
