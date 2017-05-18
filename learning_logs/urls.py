@@ -10,4 +10,7 @@ urlpatterns = [
 	#url function takes three arguments, regex matching url, 
 	# which view function to call,
 	# name for URL pattern so you can refer to it later on
+
+	#show topics
+	url(r'^topics/$', views.topics, name='topics'),
 ]
