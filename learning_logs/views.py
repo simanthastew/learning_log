@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import Topic, Entry
 #need line 5 to reference database models
@@ -13,23 +14,31 @@ def index(request):
 	""" home page for learning log """
 	return render(request, 'learning_logs/index.html')
 
+@login_required
 def topics(request):
 	""" show all topics """
-	topics = Topic.objects.order_by('date_added')
+	topics = Topic.objects.filter(owner=request.user).order_by('date_added')
 	context = {'topics': topics}
 	#context is a dictionary sent to the template where keys are names used in the template to access data
 	return render(request, 'learning_logs/topics.html', context)
 	#if you want context to be available, have to pass it to render function
 
+@login_required
+#checks to see if user is logged in, and if they are will run the code below, if not, redirected to login page
+#@ symbol is a decorator
 def topic(request, topic_id):
 	""" show individual topic with its entries """
 	topic = Topic.objects.get(id=topic_id)
 	#topic_id will be pulled from url
+	if topic.owner !=request.user:
+		raise Http404
+	# if someone enters the URL for a topic they don't own, they will get a 404 error	
 	entries = topic.entry_set.order_by('-date_added')
 	#dash before date_added sorts entries in reverse order
 	context = {'topic': topic, 'entries': entries}
 	return render(request, 'learning_logs/topic.html', context)
 
+@login_required
 def new_topic(request):
 	""" add new topic """
 	if request.method != 'POST':
@@ -41,7 +50,9 @@ def new_topic(request):
 		form = TopicForm(request.POST)
 		#WHY IS THIS NOT data=request.POST ?
 		if form.is_valid():
-			form.save()
+			new_topic = form.save(commit=False)
+			new_topic.owner = request.user
+			new_topic.save()
 			return HttpResponseRedirect(reverse('learning_logs:topics'))
 			#if form is saved, redirect back to topics page
 
@@ -49,6 +60,7 @@ def new_topic(request):
 	#the context is a form regardless of get/post, so a blank form or the filled out form is the context, but on post request you get redirected
 	return render(request, 'learning_logs/new_topic.html', context)
 
+@login_required
 def new_entry(request, topic_id):
 	""" add a new entry for an individual topic """
 	topic = Topic.objects.get(id=topic_id)
@@ -70,10 +82,13 @@ def new_entry(request, topic_id):
 	context = {'topic': topic, 'form': form}
 	return render(request, 'learning_logs/new_entry.html', context)
 
+@login_required
 def edit_entry(request, entry_id):
 	""" edit entry already saved in database """
 	entry = Entry.objects.get(id=entry_id)
 	topic = entry.topic
+	if topic.owner != request.user:
+		raise Http404
 
 	if request.method != 'POST':
 		form = EntryForm(instance=entry)
