@@ -72,7 +72,7 @@ def new_entry(request, topic_id):
 
 def edit_entry(request, entry_id):
 	""" edit entry already saved in database """
-	entry = Entry.object.get(id=entry_id)
+	entry = Entry.objects.get(id=entry_id)
 	topic = entry.topic
 
 	if request.method != 'POST':
