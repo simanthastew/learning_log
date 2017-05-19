@@ -17,7 +17,7 @@ def index(request):
 @login_required
 def topics(request):
 	""" show all topics """
-	topics = Topic.objects.order_by('date_added')
+	topics = Topic.objects.filter(owner=request.user).order_by('date_added')
 	context = {'topics': topics}
 	#context is a dictionary sent to the template where keys are names used in the template to access data
 	return render(request, 'learning_logs/topics.html', context)
