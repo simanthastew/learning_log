@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import Topic, Entry
 #need line 5 to reference database models
@@ -21,6 +22,9 @@ def topics(request):
 	return render(request, 'learning_logs/topics.html', context)
 	#if you want context to be available, have to pass it to render function
 
+@login_required
+#checks to see if user is logged in, and if they are will run the code below, if not, redirected to login page
+#@ symbol is a decorator
 def topic(request, topic_id):
 	""" show individual topic with its entries """
 	topic = Topic.objects.get(id=topic_id)
