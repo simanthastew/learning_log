@@ -14,6 +14,7 @@ def index(request):
 	""" home page for learning log """
 	return render(request, 'learning_logs/index.html')
 
+@login_required
 def topics(request):
 	""" show all topics """
 	topics = Topic.objects.order_by('date_added')
@@ -34,6 +35,7 @@ def topic(request, topic_id):
 	context = {'topic': topic, 'entries': entries}
 	return render(request, 'learning_logs/topic.html', context)
 
+@login_required
 def new_topic(request):
 	""" add new topic """
 	if request.method != 'POST':
@@ -53,6 +55,7 @@ def new_topic(request):
 	#the context is a form regardless of get/post, so a blank form or the filled out form is the context, but on post request you get redirected
 	return render(request, 'learning_logs/new_topic.html', context)
 
+@login_required
 def new_entry(request, topic_id):
 	""" add a new entry for an individual topic """
 	topic = Topic.objects.get(id=topic_id)
@@ -74,6 +77,7 @@ def new_entry(request, topic_id):
 	context = {'topic': topic, 'form': form}
 	return render(request, 'learning_logs/new_entry.html', context)
 
+@login_required
 def edit_entry(request, entry_id):
 	""" edit entry already saved in database """
 	entry = Entry.objects.get(id=entry_id)
