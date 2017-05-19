@@ -5,6 +5,9 @@
 	<p>Topic: {{ topic }}</p>
 
 	<p>Entries:</p>
+	<p>
+		<a href="{% url 'learning_logs:new_entry' topic.id %}">New Entry</a>
+	</p>
 	<ul>
 	{% for entry in entries %}
 		<li>
@@ -12,7 +15,7 @@
 			<!-- in django templates, | represents a template filter, i.e. something that modifies the value in a template variable -->
 			<p>{{ entry.text|linebreaks }}</p>
 		</li>
-	{% empty %}}
+	{% empty %}
 		<li>
 			There are no entries for this topic yet.
 		</li>

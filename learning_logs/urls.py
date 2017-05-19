@@ -11,7 +11,13 @@ urlpatterns = [
 	# which view function to call,
 	# name for URL pattern so you can refer to it later on
 
-	#show topics
 	url(r'^topics/$', views.topics, name='topics'),
+	#show topics^
 	url(r'^topics/(?P<topic_id>\d+)/$', views.topic, name='topic'),
+	#show individual topic^
+	url(r'^new_topic/$', views.new_topic, name='new_topic'),
+	#new topic page^
+	url(r'^new_entry/(?P<topic_id>\d+)/$', views.new_entry, name='new_entry'),
+	#new entry for specific topic ^
+
 ]
