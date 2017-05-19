@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Third party apps
+    'bootstrap3',
+
     # My apps
     'learning_logs',
     'users',
@@ -126,3 +129,8 @@ STATIC_URL = '/static/'
 # My Settings
 LOGIN_URL = '/users/login/'
 # login_url is where django will send unauthenticated users when they request a page protected by the @login_required decorator
+
+# Settings for django-bootstrap3
+BOOTSTRAP3 = {
+    'include_jquery': True,
+}
