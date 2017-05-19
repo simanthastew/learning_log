@@ -11,7 +11,7 @@
 		{% csrf_token %}
 		{{ form.as_p }}
 		<button name='submit'>log in</button>
-		<input type='hidden' name='next' value="(% url 'learning_logs:index' %}" />
+		<input type='hidden' name='next' value="(% url 'learning_logs:index' %)" />
 		<!-- hidden form element with name of 'next' tells django where to send user after form submits successfully (value), so back to home page  -->
 	</form>
 
