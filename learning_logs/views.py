@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
@@ -30,6 +30,9 @@ def topic(request, topic_id):
 	""" show individual topic with its entries """
 	topic = Topic.objects.get(id=topic_id)
 	#topic_id will be pulled from url
+	if topic.owner !=request.user:
+		raise Http404
+	# if someone enters the URL for a topic they don't own, they will get a 404 error	
 	entries = topic.entry_set.order_by('-date_added')
 	#dash before date_added sorts entries in reverse order
 	context = {'topic': topic, 'entries': entries}
@@ -82,6 +85,8 @@ def edit_entry(request, entry_id):
 	""" edit entry already saved in database """
 	entry = Entry.objects.get(id=entry_id)
 	topic = entry.topic
+	if topic.owner != request.user:
+		raise Http404
 
 	if request.method != 'POST':
 		form = EntryForm(instance=entry)
