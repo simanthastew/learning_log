@@ -70,23 +70,23 @@ def new_entry(request, topic_id):
 	context = {'topic': topic, 'form': form}
 	return render(request, 'learning_logs/new_entry.html', context)
 
-	def edit_entry(request, entry_id):
-		""" edit entry already saved in database """
-		entry = Entry.object.get(id=entry_id)
-		topic = entry.topic
+def edit_entry(request, entry_id):
+	""" edit entry already saved in database """
+	entry = Entry.object.get(id=entry_id)
+	topic = entry.topic
 
-		if request.method != 'POST':
-			form = EntryForm(instance=entry)
-			#prefill form with current entry, which we found off of entry id
-		else:
-			form = EntryForm(instance=entry, data=request.POST)
-			#use instance and data args to create form instancebased on the info associated with the existing entry ojbect, updated with and relevant data from request.POST
-			if form.is_valid():
-				form.save()
-				return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic.id]))
+	if request.method != 'POST':
+		form = EntryForm(instance=entry)
+		#prefill form with current entry, which we found off of entry id
+	else:
+		form = EntryForm(instance=entry, data=request.POST)
+		#use instance and data args to create form instancebased on the info associated with the existing entry ojbect, updated with and relevant data from request.POST
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic.id]))
 
-		context = {'entry': entry, 'topic': topic, 'form': form}
-		return render(request, 'learning_logs/edit_entry.html', context)
+	context = {'entry': entry, 'topic': topic, 'form': form}
+	return render(request, 'learning_logs/edit_entry.html', context)
 
 
 
